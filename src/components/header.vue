@@ -8,10 +8,10 @@
           <img src="../assets/img/Rectangle 25.png" alt="pict1">
           <div class="user-data">
             <p class="username">
-              Robert Chandler
+              {{nameUser}}
             </p>
             <p class="phonenumber">
-              +62 8139 3877 7946
+              {{phoneNumber}}
             </p>
           </div>
           <notif-bell/>
@@ -30,6 +30,10 @@ export default {
   components: {
     NotifBell
   },
+  props: [
+    'nameUser',
+    'phoneNumber'
+  ],
 
   methods: {
     modalBell () {

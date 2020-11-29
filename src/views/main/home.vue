@@ -1,14 +1,14 @@
 <template>
     <div class="container">
-        <Header/>
+        <Header :nameUser="name" :phoneNumber="phoneNumber"/>
         <div class="body-contaier">
           <SideBar/>
           <main>
             <header class="main-head">
               <div class="head-balance">
                 <p>Balance</p>
-                <p class="amount">Rp. 120.000</p>
-                <p class="phone">+62 813-9387-7946</p>
+                <p class="amount">Rp.{{balance}}</p>
+                <p class="phone">{{phoneNumber}}</p>
               </div>
               <div class="head-button">
                 <button>
@@ -79,23 +79,23 @@
                     </p>
                   </a>
                 </div>
-                <div class="transaction">
+                <div class="transaction" v-for="history in history" :key="history">
                   <div class="history">
                       <img src="../../assets/img/1.svg">
                       <div class="name1">
                           <p>
-                              Samuel Suhi
+                              {{history.name}}
                           </p>
                           <p class="desc">
                               Transfer
                           </p>
                       </div>
+                      <p class="green">
+                      {{history.type === 'income' ? '+' : '-'}}Rp.{{history.amount}}
+                      </p>
                   </div>
-                  <p class="green">
-                      +Rp.50.000
-                  </p>
                 </div>
-                <div class="transaction">
+                <!-- <div class="transaction">
                   <div class="history">
                       <img src="../../assets/img/logo.svg">
                       <div class="name1">
@@ -142,7 +142,7 @@
                   <p class="red">
                       -Rp.249.000
                   </p>
-                </div>
+                </div> -->
               </div>
             </div>
       </main>
@@ -151,12 +151,51 @@
 </template>
 
 <script>
+import axios from 'axios'
 import Header from '../../components/header'
 import SideBar from '../../components/sideBar'
 export default {
   components: {
     Header,
     SideBar
+  },
+  data () {
+    return {
+      history: [],
+      balance: 0,
+      phoneNumber: '',
+      name: ''
+    }
+  },
+  methods: {
+    getHistory () {
+      console.log('ini axios WAH')
+      axios.get('http://localhost:4000/transactions/history?id=1&page=3')
+        .then((res) => {
+          this.history = res.data.result
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+    },
+    getDetail () {
+      console.log('ini axios WAH')
+      axios.get('http://localhost:4000/users/1')
+        .then((res) => {
+          const data = res.data.result
+          this.balance = data.balance
+          this.phoneNumber = data.phone_number
+          this.name = data.first_name + ' ' + data.last_name
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+    }
+  },
+  mounted () {
+    console.log('ini mounted')
+    this.getHistory()
+    this.getDetail()
   }
 }
 </script>
