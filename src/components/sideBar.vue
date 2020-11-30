@@ -1,14 +1,14 @@
 <template>
-          <aside class="sidebar">
+    <aside class="sidebar">
         <div>
-          <a href="./dashboard.html" class="menu blue">
+          <router-link to="/" class="menu blue">
             <img src="../assets/img/grid.png" alt="grid">
             <p class="blue">Dashboard</p>
-          </a>
-          <a href="./transfer.html" class="menu">
+          </router-link>
+          <router-link to="/transfer-list" class="menu">
             <img src="../assets/img/arrow-up.svg" alt="transfer">
             <p>Transfer</p>
-          </a>
+          </router-link>
           <a href="./topup.html" class="menu">
             <img src="../assets/img/plus.png" alt="topup">
             <p>Top Up</p>
@@ -18,10 +18,10 @@
             <p>Profile</p>
           </a>
         </div>
-        <a href="/Landing Page/landing-page.html" class="logout">
+        <router-link to="/login" class="logout">
           <img src="../assets/img/log-out.svg" alt="logout">
           <p>Logout</p>
-        </a>
+        </router-link>
       </aside>
 </template>
 
@@ -33,7 +33,7 @@ export default {
 
 <style scoped>
 .sidebar {
-    /* width: 100%; */
+    width: 100%;
     height: 678px;
     box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.05);
     border-radius: 25px;
@@ -43,7 +43,6 @@ export default {
     background-color: #ffffff;
     margin-right: 30px;
 }
-
 .menu, .logout {
     display: flex;
     flex-direction: row;
@@ -155,7 +154,8 @@ export default {
 }
 
 .expense img {
-    filter: invert(41%) sepia(51%) saturate(1731%) hue-rotate(337deg) brightness(106%) contrast(106%);
+    filter: invert(41%) sepia(51%) saturate(1731%)
+    hue-rotate(337deg) brightness(106%) contrast(106%);
 }
 
 .chart {

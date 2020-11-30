@@ -1,5 +1,6 @@
 <template>
-    <div id="modal-pin" class="modal-notif" v-on:click="document.getElementById('modal-pin').style.display='none'">
+    <div id="modal-pin" class="modal-notif"
+    v-on:click="document.getElementById('modal-pin').style.display='none'">
       <form class="modal-content-notif" action=" ">
         <div class="today">
           <p>Today</p>
@@ -77,7 +78,8 @@ export default {
 }
 
 .transfer img {
-    filter: invert(41%) sepia(51%) saturate(1731%) hue-rotate(337deg) brightness(106%) contrast(106%);
+    filter: invert(41%) sepia(51%) saturate(1731%)
+    hue-rotate(337deg) brightness(106%) contrast(106%);
     margin: auto 0 auto 0;
     margin-left: 20px;
 }

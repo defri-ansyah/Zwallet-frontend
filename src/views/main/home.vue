@@ -1,7 +1,7 @@
 <template>
-    <div class="container">
+    <div class="container dashboard">
         <Header :nameUser="name" :phoneNumber="phoneNumber"/>
-        <div class="body-contaier">
+        <section class="body-container">
           <SideBar/>
           <main>
             <header class="main-head">
@@ -79,92 +79,51 @@
                     </p>
                   </a>
                 </div>
-                <div class="transaction" v-for="history in history" :key="history">
-                  <div class="history">
+                  <div class="transaction" v-for="history in history" :key="history">
+                    <div class="history">
                       <img src="../../assets/img/1.svg">
                       <div class="name1">
-                          <p>
-                              {{history.name}}
-                          </p>
-                          <p class="desc">
-                              Transfer
-                          </p>
+                        <p>
+                          {{history.name}}
+                        </p>
+                        <p class="desc">
+                          Transfer
+                        </p>
                       </div>
                       <p class="green">
-                      {{history.type === 'income' ? '+' : '-'}}Rp.{{history.amount}}
+                        {{history.type === 'income' ? '+' : '-'}}Rp.{{history.amount}}
                       </p>
+                    </div>
                   </div>
-                </div>
-                <!-- <div class="transaction">
-                  <div class="history">
-                      <img src="../../assets/img/logo.svg">
-                      <div class="name1">
-                          <p>
-                              Netflix
-                          </p>
-                          <p class="desc">
-                              Subscription
-                          </p>
-                      </div>
-                  </div>
-                  <p class="red">
-                      -Rp.149.000
-                  </p>
-                </div>
-                <div class="transaction">
-                  <div class="history">
-                      <img src="../../assets/img/2.svg">
-                      <div class="name1">
-                          <p>
-                              Christine Mar...
-                          </p>
-                          <p class="desc">
-                              Transfer
-                          </p>
-                      </div>
-                  </div>
-                  <p class="green">
-                      +Rp.150.000
-                  </p>
-                </div>
-                <div class="transaction">
-                  <div class="history">
-                      <img src="../../assets/img/adobe.svg">
-                      <div class="name1">
-                          <p>
-                              Adobe Inc.
-                          </p>
-                          <p class="desc">
-                              Transfer
-                          </p>
-                      </div>
-                  </div>
-                  <p class="red">
-                      -Rp.249.000
-                  </p>
-                </div> -->
               </div>
             </div>
-      </main>
-        </div>
+          </main>
+        </section>
+      <Footer/>
     </div>
 </template>
 
 <script>
+
 import axios from 'axios'
 import Header from '../../components/header'
 import SideBar from '../../components/sideBar'
+import Footer from '../../components/footer.vue'
+
 export default {
+  name: 'Home',
   components: {
     Header,
-    SideBar
+    SideBar,
+    Footer
   },
   data () {
     return {
       history: [],
       balance: 0,
       phoneNumber: '',
-      name: ''
+      name: '',
+      user: JSON.parse(localStorage.getItem('user'))
     }
   },
   methods: {
@@ -179,13 +138,15 @@ export default {
         })
     },
     getDetail () {
-      console.log('ini axios WAH')
-      axios.get('http://localhost:4000/users/1')
+      console.log(this.user.id)
+      axios.get('http://localhost:4000/users/' + this.user.id)
         .then((res) => {
-          const data = res.data.result
-          this.balance = data.balance
-          this.phoneNumber = data.phone_number
-          this.name = data.first_name + ' ' + data.last_name
+          if (res) {
+            const data = res.data.result
+            this.balance = data.balance
+            this.phoneNumber = data.phone_number
+            this.name = data.first_name + ' ' + data.last_name
+          }
         })
         .catch((err) => {
           console.log(err)
@@ -201,47 +162,12 @@ export default {
 </script>
 
 <style scoped>
-.body-container {
-    margin: 30px 10vw;
-    width: 80vw;
-    display: flex;
-    flex-direction: row;
-}
-
-.sidebar {
-    width: 100%;
-    height: 678px;
-    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.05);
-    border-radius: 25px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    background-color: #ffffff;
-    margin-right: 30px;
-}
-
-.menu, .logout {
-    display: flex;
-    flex-direction: row;
-    padding: 47px 0px 0px 30px;
-}
-
-.menu p, .logout p {
-    margin: auto;
-    margin-left: 20px;
-    color: #6379F4;
-    color: rgba(58, 61, 66, 0.8);
-}
-
-.menu img, .logout img {
-    filter: invert(0%) sepia(96%) saturate(0%) hue-rotate(68deg) brightness(95%) contrast(104%);
-}
-
-.logout {
-    padding-bottom: 47px;
-}
-
-.main-head {
+  .body-container{
+      margin: 30px 10vw;
+      width: 80vw;
+      display: flex;
+  }
+  .main-head {
     width: 57vw;
     height: 190px;
     background: rgba(99, 121, 244, 1);
@@ -252,24 +178,20 @@ export default {
     justify-content: space-between;
     padding-left: 30px;
     padding-right: 30px;
-}
-
-.head-balance {
+  }
+  .head-balance {
     color: #E0E0E0;
-}
-
-.amount {
+  }
+  .amount {
     color: #ffffff;
     font-size: 40px;
-}
-
-.head-button {
+  }
+  .head-button {
     display: flex;
     flex-direction: column;
     margin-top: -8px;
-}
-
-.head-button button {
+  }
+  .head-button button {
     background: rgba(255, 255, 255, 0.2);
     border: 1px solid #FFFFFF;
     box-sizing: border-box;
@@ -281,60 +203,60 @@ export default {
     flex-direction: row;
     align-items: center;
     justify-content: center;
-}
-
-.head-button button p {
+  }
+  .head-button button p {
     margin-left: 5px;
     color: #ffffff;
     font-weight: bold;
     font-size: 16px;
-}
+  }
 
-.head-button button img {
+  .head-button button img {
     filter: invert(73%) sepia(71%) saturate(348%) hue-rotate(192deg) brightness(97%) contrast(91%);
+  }
+
+  .main-section{
+    display: flex;
+    margin-top: 20px;
+    margin-bottom: 20px;
 }
 
-.article{
+  .article{
     height: 468px;
     width: 55%;
     border-radius: 25px;
     background-color: #ffffff;
     box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.05);
-}
-
-.resume {
+  }
+  .resume {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     margin: 30px;
     padding-top: 30px;
-}
-
-.income img {
+    }
+    .income img {
     filter: invert(51%) sepia(100%) saturate(346%) hue-rotate(91deg) brightness(97%) contrast(99%);
     transform: rotate(-180deg);
-}
-
-.income p, .expense p {
+  }
+  .income p, .expense p {
     line-height: 30px;
     color: #6A6A6A;
-}
-
-.title-resume {
+  }
+  .title-resume {
     font-size: 14px;
     margin: 0;
-}
-
-.amount2 {
+  }
+  .amount2 {
     font-weight: bold;
     font-size: 18px;
-}
+  }
+  .expense img {
+    filter: invert(41%) sepia(51%) saturate(1731%)
+    hue-rotate(337deg) brightness(106%) contrast(106%);
+  }
 
-.expense img {
-    filter: invert(41%) sepia(51%) saturate(1731%) hue-rotate(337deg) brightness(106%) contrast(106%);
-}
-
-.chart {
+  .chart {
     display: flex;
     flex-direction: row;
     justify-content: space-around;
@@ -342,19 +264,19 @@ export default {
     align-items: flex-end;
     text-align: center;
     margin-top: 60px;
-}
+  }
 
-.chart p {
+  .chart p {
     font-size: 14px;
-}
+  }
 
-.point, .point2 {
+  .point, .point2 {
     position: absolute;
     margin-left: -24px;
     margin-top: -24px;
-}
+    }
 
-.point {
+  .point {
     margin-top: -60px;
     box-shadow: 0px 4px 20px rgba(187, 187, 187, 0.25);
     border-radius: 6px;
@@ -363,9 +285,9 @@ export default {
     font-weight: bold;
     color: #1EC15F;
     padding-top: 5px;
-}
+  }
 
-.aside{
+  .aside{
     height: 448px;
     width: 55%;
     margin-left: 20px;
@@ -376,15 +298,15 @@ export default {
     display: flex;
     flex-direction: column;
     padding-top: 20px;
-}
+  }
 
-.main-section{
+  .main-section{
     display: flex;
     margin-top: 20px;
     margin-bottom: 20px;
-}
+  }
 
-.transaction {
+  .transaction {
     font-size: 18px;
     font-weight: 700;
     line-height: 25px;
@@ -392,36 +314,35 @@ export default {
     flex-direction: row;
     justify-content: space-between;
     margin: 20px;
-}
-.history {
+  }
+  .history {
     display: flex;
     flex-direction: row;
     align-items: center;
-}
-.name1 {
+  }
+  .name1 {
     margin-left: 10px;
-}
-.desc {
+  }
+  .desc {
     font-size: 14px;
     font-weight: normal;
     color: #7A7886;
-}
-.see-all {
+  }
+  .see-all {
     font-size: 14px;
     color: #6379F4;
-}
-.green {
+  }
+  .green {
     margin: auto;
     margin-right: 0;
     color: #1EC15F;
-}
-.red {
+    margin-left: 120px;
+    /* justify-content: space-between; */
+  }
+  .red {
     margin: auto;
     margin-right: 0;
     color: #FF5B37;
-}
-footer {
-    height: 50px;
-    width: 100%;
-}
+  }
+
 </style>
