@@ -39,4 +39,19 @@ a{
     width: 80vw;
     display: flex;
 }
+
+.green {
+    margin: auto;
+    margin-right: 0;
+    color: #1EC15F;
+}
+.red {
+    margin: auto;
+    margin-right: 0;
+    color: #FF5B37;
+}
+
+.name1 p {
+    color: #4D4B57
+}
 </style>

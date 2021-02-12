@@ -1,6 +1,6 @@
 <template>
     <div class="container dashboard">
-        <Header :nameUser="name" :phoneNumber="phoneNumber"/>
+        <Header :nameUser="userDetail.first_name +' '+ userDetail.last_name" :phoneNumber="userDetail.phone_number"/>
         <section class="transfer-container">
           <SideBar/>
           <main>
@@ -18,7 +18,7 @@
               </div>
               <div class="week-history">
                 <div class="history-list">
-                  <div class="transaction receiver-list" v-for="users in users" :key="users">
+                  <div class="transaction receiver-list" v-for="users in userList" :key="users">
                     <router-link to="./transfer-amount.html" class="history receiver">
                       <img src="../../assets/img/1.svg">
                       <div class="name1">
@@ -79,6 +79,7 @@ import axios from 'axios'
 import Header from '../../components/header'
 import SideBar from '../../components/sideBar'
 import Footer from '../../components/footer.vue'
+import { mapState, mapActions } from 'vuex'
 
 export default {
   name: 'Home',
@@ -87,6 +88,14 @@ export default {
     SideBar,
     Footer
   },
+  created () {
+    this.$store.dispatch('loadUserDetail')
+    this.$store.dispatch('loadUserList', '')
+  },
+  computed: mapState([
+    'userDetail',
+    'userList'
+  ]),
   data () {
     return {
       url: 'http://localhost:4000/users?search=',
@@ -98,6 +107,7 @@ export default {
     }
   },
   methods: {
+    ...mapActions(['loadUserList']),
     getUsers () {
       console.log('ini axios WAH')
       axios.get(this.url)
@@ -109,20 +119,7 @@ export default {
         })
     },
     searchUsers () {
-      this.url = `http://localhost:4000/users?search=${this.search}`
-      this.getUsers()
-    },
-    getDetail () {
-      axios.get('http://localhost:4000/users/' + this.user.id)
-        .then((res) => {
-          const data = res.data.result
-          this.balance = data.balance
-          this.phoneNumber = data.phone_number
-          this.name = data.first_name + ' ' + data.last_name
-        })
-        .catch((err) => {
-          console.log(err)
-        })
+      this.loadUserList(this.search)
     }
   },
   mounted () {
@@ -201,7 +198,7 @@ export default {
     width: 100%;
     box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.05);
     border-radius: 10px;
-    margin-bottom: 30px;
+    margin-bottom: 10px;
 }
 
 .receiver img {
@@ -211,7 +208,7 @@ export default {
 .receiver-list {
     display: flex;
     flex-direction: column;
-    margin-top: 30px;
+    margin-top: 10px;
 }
 
 .week-history {
@@ -220,12 +217,6 @@ export default {
 
 .receiver img {
     margin-left: 30px;
-}
-
-.receiver-list {
-    display: flex;
-    flex-direction: column;
-    margin-top: 30px;
 }
 
 .history {

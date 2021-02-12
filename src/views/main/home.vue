@@ -1,14 +1,14 @@
 <template>
     <div class="container dashboard">
-        <Header :nameUser="name" :phoneNumber="phoneNumber"/>
+        <Header :nameUser="userDetail.first_name +' '+ userDetail.last_name" :phoneNumber="userDetail.phone_number"/>
         <section class="body-container">
           <SideBar/>
           <main>
             <header class="main-head">
               <div class="head-balance">
                 <p>Balance</p>
-                <p class="amount">Rp.{{balance}}</p>
-                <p class="phone">{{phoneNumber}}</p>
+                <p class="amount">Rp.{{userDetail.balance}}</p>
+                <p class="phone">{{userDetail.phone_number}}</p>
               </div>
               <div class="head-button">
                 <button>
@@ -73,13 +73,13 @@
                   <p class="history">
                       Transaction History
                   </p>
-                  <a href="./history.html">
+                  <router-link to="/history">
                     <p class="see-all">
                         See All
                     </p>
-                  </a>
+                  </router-link>
                 </div>
-                  <div class="transaction" v-for="history in history" :key="history">
+                  <div class="transaction" v-for="history in history.result" :key="history">
                     <div class="history">
                       <img src="../../assets/img/1.svg">
                       <div class="name1">
@@ -109,6 +109,7 @@ import axios from 'axios'
 import Header from '../../components/header'
 import SideBar from '../../components/sideBar'
 import Footer from '../../components/footer.vue'
+import { mapState } from 'vuex'
 
 export default {
   name: 'Home',
@@ -117,9 +118,16 @@ export default {
     SideBar,
     Footer
   },
+  created () {
+    this.$store.dispatch('loadUserDetail')
+    this.$store.dispatch('loadHistory')
+  },
+  computed: mapState([
+    'userDetail',
+    'history'
+  ]),
   data () {
     return {
-      history: [],
       balance: 0,
       phoneNumber: '',
       name: '',
@@ -129,13 +137,13 @@ export default {
   methods: {
     getHistory () {
       console.log('ini axios WAH')
-      axios.get('http://localhost:4000/transactions/history?id=1&page=3')
-        .then((res) => {
-          this.history = res.data.result
-        })
-        .catch((err) => {
-          console.log(err)
-        })
+      // axios.get('http://localhost:4000/transactions/history?id=1&page=1')
+      //   .then((res) => {
+      //     this.history = res.data.result
+      //   })
+      //   .catch((err) => {
+      //     console.log(err)
+      //   })
     },
     getDetail () {
       console.log(this.user.id)

@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <SideLogin/>
-    <form @submit="register" class="form-container">
+    <form @submit="handleRegister" class="form-container">
       <p class="text2">
         Start Accessing Banking Needs With All Devices and All Platforms With 30.000+ Users
       </p>
@@ -39,6 +39,7 @@
 <script>
 import SideLogin from '../../components/sideLogin'
 import axios from 'axios'
+import { mapActions } from 'vuex'
 
 export default {
   name: 'Login',
@@ -46,6 +47,23 @@ export default {
     SideLogin
   },
   methods: {
+    ...mapActions(['signUp']),
+    handleRegister (e) {
+      const payload = {
+        username: this.username,
+        email: this.email,
+        password: this.password
+      }
+      e.preventDefault()
+      this.signUp(payload)
+        .then((res) => {
+          this.$router.push('/login')
+        })
+        .catch((err) => {
+          console.log(err.response.data.error.message)
+          alert(err.response.data.error.message)
+        })
+    },
     register (e) {
       e.preventDefault()
       axios
@@ -130,6 +148,7 @@ export default {
     margin-left: 20px;
     font-family: Nunito Sans;
     color: #A9A9A9 80%;
+    outline: none;
 }
 
 .forgot-password{
@@ -152,6 +171,8 @@ export default {
     text-align: center;
     padding: 10px 0px;
     margin-top: 70px;
+    height: 57px;
+    width: 433px;
 }
 
 .btn-register {

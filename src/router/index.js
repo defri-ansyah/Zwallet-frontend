@@ -6,6 +6,10 @@ import Signup from '../views/main/signup.vue'
 import Pin from '../views/main/pin.vue'
 import Transfer from '../views/main/transfer.vue'
 import History from '../views/main/history.vue'
+import Forgot from '../views/main/forgot.vue'
+import Reset from '../views/main/reset.vue'
+import managePhone from '../views/main/manage-phone.vue'
+import Profile from '../views/main/profile.vue'
 
 Vue.use(VueRouter)
 
@@ -39,6 +43,26 @@ const routes = [
     path: '/history',
     name: 'history',
     component: History
+  },
+  {
+    path: '/forgot',
+    name: 'forgot',
+    component: Forgot
+  },
+  {
+    path: '/reset',
+    name: 'reset',
+    component: Reset
+  },
+  {
+    path: '/manage-phone',
+    name: 'phone',
+    component: managePhone
+  },
+  {
+    path: '/profile',
+    name: 'profile',
+    component: Profile
   }
 ]
 

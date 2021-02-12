@@ -1,22 +1,19 @@
 <template>
   <div class="container">
     <SideLogin/>
-    <form class="form-container">
+    <form @submit="handleCekEmail" class="form-container">
       <p class="text2">
-        Secure Your Account, Your Wallet, and Your Data With 6 Digits PIN That You Created Yourself.
+        Did You Forgot Your Password? Don’t Worry, You Can Reset Your Password In a Minutes.
       </p>
-      <p class="text4">
-        Create 6 digits pin to secure all your money and your data in Zwallet app. Keep it secret and don’t tell anyone about your Zwallet account password and the PIN.
+      <p class="text3">
+        To reset your password, you must type your e-mail and we will send a link to your email and you will be directed to the reset password screens.
       </p>
       <div class="form-input">
-        <input id="codeBox1" type="number" maxlength="1" @keyup="onKeyUpEvent(1, event)" @focus="onFocusEvent(1)"/>
-        <input id="codeBox2" type="number" maxlength="1" @keyup="onKeyUpEvent(2, event)" @focus="onFocusEvent(2)"/>
-        <input id="codeBox3" type="number" maxlength="1" @keyup="onKeyUpEvent(3, event)" @focus="onFocusEvent(3)"/>
-        <input id="codeBox4" type="number" maxlength="1" @keyup="onKeyUpEvent(4, event)" @focus="onFocusEvent(4)"/>
-        <input id="codeBox5" type="number" maxlength="1" @keyup="onKeyUpEvent(5, event)" @focus="onFocusEvent(5)"/>
-        <input id="codeBox6" type="number" maxlength="1" @keyup="onKeyUpEvent(6, event)" @focus="onFocusEvent(6)"/>
-        <a href="./pin-success.html" type="submit" id="confirm" class="btn-register">Confirm
-        </a>
+        <div class="login-input">
+          <img src="../../assets/img/mail.png" class="login-label">
+          <input type="email" id="email" placeholder="Enter your email" onkeyup="onKeyUpForgot()" v-model="email" required>
+        </div>
+        <button type="submit" id="confirm1" class="btn-1">Confirm</button>
       </div>
     </form>
   </div>
@@ -24,30 +21,34 @@
 
 <script>
 import SideLogin from '../../components/sideLogin'
+import { mapActions } from 'vuex'
 
 export default {
-  name: 'Login',
+  name: 'forgot',
   components: {
     SideLogin
   },
-
+  data () {
+    return {
+      email: null
+    }
+  },
   methods: {
-    // onKeyUpEvent (index, event) {
-    //   const eventCode = event.which || event.keyCode
-    //   const confirm = document.getElementById('confirm')
-    //   if (getCodeBoxElement(index).value.length === 1) {
-    //     if (index !== 6) {
-    //       getCodeBoxElement(index + 1).focus()
-    //     } else {
-    //       getCodeBoxElement(index).blur()
-    //       // Submit code
-    //       confirm.classList = 'btn-1'
-    //     }
-    //   }
-    //   if (eventCode === 8 && index !== 1) {
-    //     getCodeBoxElement(index - 1).focus()
-    //   }
-    // }
+    ...mapActions(['cekEmail']),
+    handleCekEmail () {
+      console.log('here')
+      const payload = {
+        email: this.email
+      }
+      // e.preventDefault()
+      this.cekEmail(payload)
+        .then((res) => {
+          this.$router.push('/reset')
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+    }
   }
 }
 </script>
@@ -139,6 +140,8 @@ export default {
     text-align: center;
     padding: 10px 0px;
     margin-top: 70px;
+    height: 57px;
+    width: 433px;
 }
 
 .btn-register {

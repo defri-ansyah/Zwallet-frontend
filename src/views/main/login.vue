@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <SideLogin/>
-    <form @submit="login" class="form-container">
+    <form @submit="handleLogin" class="form-container">
       <p class="text2">
         Start Accessing Banking Needs With All Devices and All Platforms With 30.000+ Users
       </p>
@@ -18,9 +18,9 @@
           <input type="password" id="password" placeholder="Enter your password" v-model="password" required>
           <img src="../../assets/img/eye-open.png" class="login-label eye" id="togglePassword" onclick="myFunction()">
         </div>
-        <a href="./forgot.html" class="forgot-password">
+        <router-link to="/forgot" class="forgot-password">
           <p>Forgot password?</p>
-        </a>
+        </router-link>
         <button type="submit" class="btn-1">Login
         </button>
         <footer class="sign-up">
@@ -36,7 +36,8 @@
 
 <script>
 import SideLogin from '../../components/sideLogin'
-import axios from 'axios'
+// import axios from 'axios'
+import { mapActions, mapGetters, mapState } from 'vuex'
 
 export default {
   name: 'Login',
@@ -53,31 +54,53 @@ export default {
     }
   },
   methods: {
-    localData () {
-      console.log(this.userId)
-      const parsed = JSON.stringify({
-        isLogin: true,
-        id: this.userId
-      })
-      localStorage.setItem('user', parsed)
-    },
-    login (e) {
+    ...mapActions(['login']),
+    handleLogin (e) {
+      const payload = {
+        email: this.email,
+        password: this.password
+      }
       e.preventDefault()
-      axios
-        .post('http://localhost:4000/users/login', {
-          email: this.email,
-          password: this.password
-        }).then((res) => {
-          if (res.data.statusCode === 200) {
-            this.userId = res.data.result[0].id
-            this.$router.push('/')
-            this.localData()
-          }
+      this.login(payload)
+        .then((res) => {
+          this.$router.push('/')
         })
         .catch((err) => {
-          console.log(err)
+          console.log(err.response.data.error.message)
+          alert(err.response.data.error.message)
         })
     }
+    // localData () {
+    //   console.log(this.userId)
+    //   const parsed = JSON.stringify({
+    //     isLogin: true,
+    //     id: this.userId
+    //   })
+    //   localStorage.setItem('user', parsed)
+    // },
+    // login (e) {
+    //   e.preventDefault()
+    //   axios
+    //     .post('http://localhost:4000/users/login', {
+    //       email: this.email,
+    //       password: this.password
+    //     }).then((res) => {
+    //       if (res.data.statusCode === 200) {
+    //         this.userId = res.data.result[0].id
+    //         this.$router.push('/')
+    //         this.localData()
+    //       }
+    //     })
+    //     .catch((err) => {
+    //       console.log(err)
+    //     })
+    // }
+  },
+  computed: {
+    ...mapGetters(['getUser']),
+    ...mapState({
+      userId: state => state.idUser
+    })
   }
 }
 </script>
@@ -146,6 +169,7 @@ export default {
     margin-left: 20px;
     font-family: Nunito Sans;
     color: #A9A9A9 80%;
+    outline: none;
 }
 
 .forgot-password{

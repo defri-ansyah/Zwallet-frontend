@@ -13,10 +13,10 @@
             <img src="../assets/img/plus.png" alt="topup">
             <p>Top Up</p>
           </a>
-          <a href="./profile.html" class="menu">
+          <router-link to="/manage-phone" class="menu">
             <img src="../assets/img/user.svg" alt="profile">
             <p>Profile</p>
-          </a>
+          </router-link>
         </div>
         <router-link to="/login" class="logout">
           <img src="../assets/img/log-out.svg" alt="logout">
